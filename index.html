@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omar Faruk Arif | Data Scientist & MLOps Engineer Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#131c2e',
+                            900: '#0f172a',
+                            950: '#070b14',
+                        },
+                        accent: {
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            violet: '#8b5cf6',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar & UI Polish */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glass-card {
+            background: rgba(19, 28, 46, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.15);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pulse-dot {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-emerald 2s infinite;
+        }
+        @keyframes pulse-emerald {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #resumePrintArea, #resumePrintArea * {
+                visibility: visible;
+            }
+            #resumePrintArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 border border-emerald-500/50 text-slate-100 px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage" class="text-sm font-medium">Action completed!</span>
+    </div>
+
+    <!-- Mobile Top Header -->
+    <header class="lg:hidden sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="WhatsApp Image 2026-10-29 at 5.22.50 PM.jpeg" alt="Omar Faruk Arif" class="omar-avatar-img w-9 h-9 rounded-lg object-cover object-top border border-cyan-500/40 shadow" onerror="handleImageFallback(this)">
+            <div>
+                <h1 class="font-bold text-sm text-white leading-tight">Omar Faruk Arif</h1>
+                <p class="text-xs text-cyan-400 font-mono">Data Scientist • UIU</p>
+            </div>
+        </div>
+        <button id="mobileMenuBtn" class="p-2.5 rounded-lg bg-slate-800 text-slate-200 hover:text-cyan-400 focus:outline-none">
+            <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+    </header>
+
+    <!-- Hidden File Input for Live Photo Preview & Base64 Embedding -->
+    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
+
+    <div class="flex min-h-screen relative">
+
+        <!-- LEFT SIDEBAR: STREAMLIT-INSPIRED PROFILE & CREDENTIALS -->
+        <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 w-80 h-screen bg-slate-900 border-r border-slate-800/90 flex flex-col justify-between overflow-y-auto transition-transform duration-300 -translate-x-full lg:translate-x-0 shrink-0">
+            <div class="p-6 space-y-6">
+                <!-- Close btn on mobile -->
+                <div class="flex items-center justify-between lg:hidden pb-2 border-b border-slate-800">
+                    <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Candidate Sidebar</span>
+                    <button id="closeSidebarBtn" class="p-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Avatar & Identity -->
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4">
+                        <div class="relative group cursor-pointer shrink-0" onclick="triggerPhotoPicker()" title="Click to load/update your portrait photo">
+                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-emerald-500 p-0.5 shadow-lg shadow-cyan-500/25 overflow-hidden">
+                                <img src="WhatsApp Image 2026-10-29 at 5.22.50 PM.jpeg" alt="Omar Faruk Arif" class="omar-avatar-img w-full h-full object-cover object-top rounded-[14px] bg-slate-900" onerror="handleImageFallback(this)">
+                            </div>
+                            <div class="absolute inset-0 bg-slate-950/60 rounded-2xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <i class="fa-solid fa-camera text-cyan-400 text-sm"></i>
+                            </div>
+                            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-slate-900 absolute -bottom-0.5 -right-0.5 pulse-dot" title="Available for Data Science & MLOps Roles"></span>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Open to Roles
+                            </span>
+                            <h2 class="text-xl font-bold text-white tracking-tight mt-1">Omar Faruk Arif</h2>
+                            <p class="text-xs text-cyan-400 font-medium">Data Scientist & ML Engineer</p>
+                            <button onclick="triggerPhotoPicker()" class="mt-1.5 inline-flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-cyan-400 transition">
+                                <i class="fa-solid fa-image"></i>
+                                <span>Load Local Photo</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Academic Credentials Box -->
+                    <div class="p-3.5 rounded-xl bg-slate-850/90 border border-slate-800 space-y-1 text-xs leading-relaxed">
+                        <div class="flex items-center gap-2 text-amber-400 font-semibold">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Final-Year Undergraduate</span>
+                        </div>
+                        <p class="text-slate-200 font-medium">B.Sc. in Computer Science & Engineering</p>
+                        <p class="text-cyan-400 italic font-mono text-[11px]">Major: Data Science</p>
+                        <p class="text-slate-300 font-semibold pt-1 border-t border-slate-800/80 mt-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-building-columns text-slate-400 text-[11px]"></i>
+                            United International University (UIU)
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <div class="space-y-1.5">
+                    <p class="text-[11px] font-mono uppercase tracking-wider text-slate-400 px-2">Workspace View</p>
+                    <button onclick="switchMainTab('portfolio')" id="nav-portfolio" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition">
+                        <i class="fa-solid fa-layer-group w-4"></i>
+                        <span>Interactive Portfolio</span>
+                    </button>
+                    <button onclick="switchMainTab('simulators')" id="nav-simulators" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white transition">
+                        <i class="fa-solid fa-Flask-vial fa-flask w-4 text-emerald-400"></i>
+                        <span>Live Project Simulators</span>
+                        <span class="ml-auto text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">5 Live</span>
+                    </button>
+                    <button onclick="switchMainTab('streamlit')" id="nav-streamlit" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white transition">
+                        <i class="fa-brands fa-python w-4 text-amber-400"></i>
+                        <span>Streamlit `app.py` Code</span>
+                    </button>
+                </div>
+
+                <hr class="border-slate-800">
+
+                <!-- Contact & Coordinates -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                        <span>📬 Contact & Coordinates</span>
+                    </h3>
+                    <ul class="space-y-2.5 text-xs">
+                        <li class="flex items-start gap-3 text-slate-300">
+                            <i class="fa-solid fa-mobile-screen-button text-cyan-400 mt-0.5 w-4 text-center"></i>
+                            <div>
+                                <span class="text-slate-400 block text-[11px]">Phone</span>
+                                <a href="tel:+8801948121182" class="hover:text-cyan-400 font-mono transition">+880 1948-121182</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-300">
+                            <i class="fa-solid fa-envelope text-emerald-400 mt-0.5 w-4 text-center"></i>
+                            <div class="overflow-hidden">
+                                <span class="text-slate-400 block text-[11px]">Email</span>
+                                <a href="mailto:arifahmed26610@gmail.com" class="hover:text-emerald-400 font-mono truncate block transition">arifahmed26610@gmail.com</a>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-300">
+                            <i class="fa-solid fa-location-dot text-rose-400 mt-0.5 w-4 text-center"></i>
+                            <div>
+                                <span class="text-slate-400 block text-[11px]">Address</span>
+                                <span class="leading-snug block">K-268, Ward-8, Konabari-1746, Gazipur City Corporation, Bangladesh</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- Social / Coding Profiles -->
+                    <div class="grid grid-cols-3 gap-2 pt-2">
+                        <a href="https://github.com/arif22ah" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-850 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 hover:text-white transition group">
+                            <i class="fa-brands fa-github text-lg mb-1 group-hover:text-cyan-400"></i>
+                            <span class="text-[10px] font-mono">arif22ah</span>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-850 hover:bg-slate-800 border border-slate-800 hover:border-blue-500/40 text-slate-300 hover:text-white transition group">
+                            <i class="fa-brands fa-linkedin text-lg mb-1 group-hover:text-blue-400"></i>
+                            <span class="text-[10px] font-mono">LinkedIn</span>
+                        </a>
+                        <a href="https://kaggle.com" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-850 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition group">
+                            <i class="fa-brands fa-kaggle text-lg mb-1 group-hover:text-sky-400"></i>
+                            <span class="text-[10px] font-mono">Kaggle</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action CTA Buttons -->
+                <div class="space-y-2.5 pt-2">
+                    <button onclick="openResumeModal()" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 transition">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>📄 Download Omar's Resume (PDF)</span>
+                    </button>
+                    <button onclick="triggerPhotoPicker()" class="w-full py-2 px-4 rounded-xl bg-slate-850 hover:bg-slate-800 border border-cyan-500/30 text-cyan-300 font-mono text-xs flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-camera-retro"></i>
+                        <span>Select / Embed Your Photo</span>
+                    </button>
+                    <button onclick="copyStreamlitCode()" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-mono text-xs flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-code text-amber-400"></i>
+                        <span>Copy Streamlit `app.py`</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-800/80 text-center">
+                <p class="text-[11px] font-mono text-slate-500">Built for Production ML & Data Science</p>
+            </div>
+        </aside>
+
+        <!-- Backdrop for Mobile Sidebar -->
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden" onclick="toggleMobileSidebar(false)"></div>
+
+        <!-- MAIN WORKSPACE CONTENT -->
+        <main class="flex-1 min-w-0 p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto space-y-10">
+
+            <!-- TAB 1: FULL PORTFOLIO VIEW -->
+            <div id="tab-portfolio" class="space-y-12">
+
+                <!-- HERO BANNER -->
+                <section class="relative rounded-3xl overflow-hidden glass-card p-6 sm:p-10 border border-slate-800">
+                    <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                        <div class="space-y-4 max-w-2xl">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700 text-xs font-mono text-cyan-400">
+                                <i class="fa-solid fa-terminal"></i>
+                                <span>End-to-End Data Science • MLOps • Agentic SQL • Causal Inference</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                                Shipping <span class="gradient-text">Production-Grade</span> Machine Learning Systems.
+                            </h1>
+                            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                                Hi, I'm <strong class="text-white">Omar Faruk Arif</strong> — a Final-Year Data Science Undergraduate at <strong class="text-cyan-400">United International University (UIU)</strong>. Instead of stopping at static Jupyter notebooks, I architect complete systems with <span class="text-emerald-400 font-medium">SQL evaluation guardrails, automated drift retraining, causal uplift modeling, real-time Kafka anomaly detection, and statistically rigorous A/B testing</span>.
+                            </p>
+                            <div class="flex flex-wrap items-center gap-3 pt-2">
+                                <a href="#projects-section" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-sm transition flex items-center gap-2 shadow-lg shadow-cyan-500/20">
+                                    <span>Explore 5 Production Systems</span>
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </a>
+                                <button onclick="switchMainTab('simulators')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-medium text-sm transition flex items-center gap-2">
+                                    <i class="fa-solid fa-play text-emerald-400"></i>
+                                    <span>Launch Interactive Simulators</span>
+                                </button>
+                                <button onclick="downloadEmbeddedHtml()" id="exportEmbeddedBtn" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 font-mono text-xs transition flex items-center gap-2" title="Download ready-to-deploy index.html with your photo embedded inside">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>Export `index.html` for GitHub</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Executive Portrait & Metric Highlights Card -->
+                        <div class="shrink-0 lg:w-80 space-y-3">
+                            <div class="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 flex items-center gap-4">
+                                <div class="relative group cursor-pointer shrink-0" onclick="triggerPhotoPicker()" title="Click to select your photo file">
+                                    <div class="w-20 h-24 rounded-xl overflow-hidden border-2 border-cyan-500/50 shadow-lg shadow-cyan-500/15 bg-slate-800">
+                                        <img src="WhatsApp Image 2026-10-29 at 5.22.50 PM.jpeg" alt="Omar Faruk Arif Portrait" class="omar-avatar-img w-full h-full object-cover object-top" onerror="handleImageFallback(this)">
+                                    </div>
+                                    <span class="absolute -bottom-1 -right-1 bg-cyan-500 text-slate-950 rounded-md px-1.5 py-0.5 text-[9px] font-mono font-bold shadow">UIU</span>
+                                </div>
+                                <div class="space-y-1 min-w-0">
+                                    <div class="text-sm font-bold text-white truncate">Omar Faruk Arif</div>
+                                    <div class="text-xs text-cyan-400 font-mono">B.Sc. CSE (Data Science)</div>
+                                    <div class="text-[11px] text-slate-400">Gazipur, Bangladesh</div>
+                                    <button onclick="triggerPhotoPicker()" class="mt-1 px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-[10px] font-mono flex items-center gap-1.5 transition">
+                                        <i class="fa-solid fa-upload"></i>
+                                        <span>Attach Photo File</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                                    <div class="text-xl sm:text-2xl font-extrabold text-cyan-400 font-mono">5</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">Production Systems</div>
+                                </div>
+                                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                                    <div class="text-xl sm:text-2xl font-extrabold text-emerald-400 font-mono">94.2%</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">Text-to-SQL Eval Acc</div>
+                                </div>
+                                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                                    <div class="text-xl sm:text-2xl font-extrabold text-violet-400 font-mono">+$148K</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">Causal Uplift ROI</div>
+                                </div>
+                                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                                    <div class="text-xl sm:text-2xl font-extrabold text-amber-400 font-mono">18 ms</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5">Kafka PyTorch Latency</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TECHNICAL SKILLS & PRODUCTION STACK -->
+                <section id="skills-section" class="space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-cyan-400">Full-Lifecycle Capability</span>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Production Data Science & MLOps Stack</h2>
+                        </div>
+                        <!-- Skill Filter Buttons -->
+                        <div class="flex flex-wrap gap-1.5" id="skillFilters">
+                            <button onclick="filterSkills('all')" data-filter="all" class="skill-filter-btn active px-3 py-1.5 rounded-lg text-xs font-mono bg-cyan-500 text-slate-950 font-semibold transition">All (22)</button>
+                            <button onclick="filterSkills('core')" data-filter="core" class="skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Core & DB</button>
+                            <button onclick="filterSkills('ml')" data-filter="ml" class="skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">ML / DL</button>
+                            <button onclick="filterSkills('mlops')" data-filter="mlops" class="skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">MLOps & Big Data</button>
+                            <button onclick="filterSkills('genai')" data-filter="genai" class="skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">LLM & Agents</button>
+                        </div>
+                    </div>
+
+                    <!-- Skills Grid -->
+                    <div id="skillsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Populated dynamically via JS for clean filtering -->
+                    </div>
+                </section>
+
+                <!-- 5 FEATURED PRODUCTION PROJECTS -->
+                <section id="projects-section" class="space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Beyond Tutorials • Built for Industry</span>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">5 Signature Data Science & MLOps Projects</h2>
+                            <p class="text-slate-400 text-sm mt-1">Each system solves a real post-deployment, causal, or evaluation bottleneck that interviewers care about.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="filterProjects('all')" data-pfilter="all" class="proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-emerald-500 text-slate-950 font-semibold transition">All Systems (5)</button>
+                            <button onclick="filterProjects('genai')" data-pfilter="genai" class="proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">GenAI & SQL</button>
+                            <button onclick="filterProjects('mlops')" data-pfilter="mlops" class="proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">MLOps & Streaming</button>
+                            <button onclick="filterProjects('causal')" data-pfilter="causal" class="proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Causality & A/B</button>
+                        </div>
+                    </div>
+
+                    <div id="projectsContainer" class="space-y-6">
+                        <!-- Populated via JS -->
+                    </div>
+                </section>
+
+                <!-- DIRECT CONTACT & COORDINATES SECTION -->
+                <section class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
+                        <div class="space-y-2 max-w-2xl">
+                            <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                📬 Get in Touch & Coordinates
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white pt-1">Contact & Academic Credentials</h2>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Final-Year Undergraduate in <strong class="text-white">B.Sc. in Computer Science & Engineering (Major: Data Science)</strong> at <strong class="text-cyan-400">United International University (UIU)</strong>. Reach out directly via email, phone, or professional profiles below.
+                            </p>
+                        </div>
+                        <button onclick="openResumeModal()" class="self-start md:self-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-xs flex items-center gap-2 shadow-lg shadow-cyan-500/20 transition shrink-0">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            <span>📄 Download Omar's Resume (PDF)</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                        <!-- Email Card -->
+                        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                                    <i class="fa-solid fa-envelope text-base"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-400 text-[11px]">Email Address</div>
+                                    <a href="mailto:arifahmed26610@gmail.com" class="text-white font-mono hover:text-cyan-400 truncate block transition">arifahmed26610@gmail.com</a>
+                                </div>
+                            </div>
+                            <button onclick="copyTextToClipboard('arifahmed26610@gmail.com', 'Email address copied!')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition shrink-0" title="Copy Email">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <!-- Phone Card -->
+                        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                                    <i class="fa-solid fa-phone text-base"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-400 text-[11px]">Phone</div>
+                                    <a href="tel:+8801948121182" class="text-white font-mono hover:text-emerald-400 block transition">+880 1948-121182</a>
+                                </div>
+                            </div>
+                            <button onclick="copyTextToClipboard('+880 1948-121182', 'Phone number copied!')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition shrink-0" title="Copy Phone">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <!-- GitHub Card -->
+                        <a href="https://github.com/arif22ah" target="_blank" rel="noopener noreferrer" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 hover:border-violet-500/40 flex items-center justify-between gap-3 transition group">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 shrink-0">
+                                    <i class="fa-brands fa-github text-base"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-400 text-[11px]">GitHub Profile</div>
+                                    <span class="text-white font-mono group-hover:text-violet-400 truncate block transition">github.com/arif22ah</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-violet-400"></i>
+                        </a>
+
+                        <!-- LinkedIn Card -->
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 hover:border-blue-500/40 flex items-center justify-between gap-3 transition group">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                                    <i class="fa-brands fa-linkedin text-base"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-400 text-[11px]">LinkedIn</div>
+                                    <span class="text-white font-mono group-hover:text-blue-400 truncate block transition">linkedin.com/in/omarfaruk-arif</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-blue-400"></i>
+                        </a>
+
+                        <!-- Kaggle Card -->
+                        <a href="https://kaggle.com" target="_blank" rel="noopener noreferrer" class="p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800 hover:border-sky-500/40 flex items-center justify-between gap-3 transition group">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+                                    <i class="fa-brands fa-kaggle text-base"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="text-slate-400 text-[11px]">Kaggle</div>
+                                    <span class="text-white font-mono group-hover:text-sky-400 truncate block transition">kaggle.com/omarfarukarif</span>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 group-hover:text-sky-400"></i>
+                        </a>
+
+                        <!-- Location Card -->
+                        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0">
+                                <i class="fa-solid fa-location-dot text-base"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-slate-400 text-[11px]">Address / Location</div>
+                                <span class="text-white block leading-snug">K-268, Ward-8, Konabari-1746, Gazipur City Corporation, Bangladesh</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TAB 2: INTERACTIVE PROJECT SIMULATORS -->
+            <div id="tab-simulators" class="hidden space-y-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Interactive Sandbox</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Live System Architecture Simulators</h2>
+                        <p class="text-slate-400 text-sm">Test drive Omar's 5 production pipelines directly in the browser.</p>
+                    </div>
+                    <button onclick="switchMainTab('portfolio')" class="self-start px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Overview</span>
+                    </button>
+                </div>
+
+                <!-- Simulator Selector Pills -->
+                <div class="flex flex-wrap gap-2" id="simSelectorButtons">
+                    <button onclick="selectSimulator(1)" id="sim-btn-1" class="px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-cyan-500 text-slate-950 transition">1. Multi-Agent Text-to-SQL</button>
+                    <button onclick="selectSimulator(2)" id="sim-btn-2" class="px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">2. Data Drift & Retraining</button>
+                    <button onclick="selectSimulator(3)" id="sim-btn-3" class="px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">3. Causal Uplift Modeling</button>
+                    <button onclick="selectSimulator(4)" id="sim-btn-4" class="px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">4. Streaming Anomaly Detection</button>
+                    <button onclick="selectSimulator(5)" id="sim-btn-5" class="px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">5. Hybrid RecSys + A/B Test</button>
+                </div>
+
+                <!-- SIMULATOR 1: MULTI-AGENT TEXT-TO-SQL -->
+                <div id="sim-panel-1" class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-cyan-400">PostgreSQL + LangChain + FastAPI + Guardrails</span>
+                            <h3 class="text-xl font-bold text-white">Multi-Agent Text-to-SQL Engine with Validation & Eval Suite</h3>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> Read-Only Guardrail: ACTIVE
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-5 space-y-4">
+                            <label class="block text-xs font-mono uppercase text-slate-400">Select a Natural Language Business Question:</label>
+                            <div class="space-y-2">
+                                <button onclick="runSqlSim(0)" class="w-full text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/40 text-xs text-slate-200 transition flex items-center justify-between">
+                                    <span>"Which region had the biggest drop in sales last quarter?"</span>
+                                    <i class="fa-solid fa-bolt text-cyan-400"></i>
+                                </button>
+                                <button onclick="runSqlSim(1)" class="w-full text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs text-slate-200 transition flex items-center justify-between">
+                                    <span>"Top 3 product categories by repeat customer retention rate?"</span>
+                                    <i class="fa-solid fa-bolt text-cyan-400"></i>
+                                </button>
+                                <button onclick="runSqlSim(2)" class="w-full text-left p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-rose-500/40 text-xs text-rose-300 transition flex items-center justify-between">
+                                    <span>"[Adversarial Test] DROP TABLE regional_sales; --"</span>
+                                    <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                                </button>
+                            </div>
+
+                            <!-- Evaluation Benchmark Scorecard -->
+                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                                <div class="text-xs font-mono text-slate-400 uppercase">Offline Benchmark Suite (150 Gold Queries)</div>
+                                <div class="grid grid-cols-3 gap-2 pt-1">
+                                    <div class="p-2.5 rounded-lg bg-slate-950 text-center">
+                                        <div class="text-base font-bold text-emerald-400 font-mono">94.2%</div>
+                                        <div class="text-[10px] text-slate-400">Execution Acc</div>
+                                    </div>
+                                    <div class="p-2.5 rounded-lg bg-slate-950 text-center">
+                                        <div class="text-base font-bold text-cyan-400 font-mono">100%</div>
+                                        <div class="text-[10px] text-slate-400">DML Blocked</div>
+                                    </div>
+                                    <div class="p-2.5 rounded-lg bg-slate-950 text-center">
+                                        <div class="text-base font-bold text-violet-400 font-mono">1.4s</div>
+                                        <div class="text-[10px] text-slate-400">Avg Latency</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs space-y-3">
+                                <div class="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
+                                    <span>AGENT GENERATED SQL & GUARDRAIL STATUS</span>
+                                    <span id="sqlGuardBadge" class="text-emerald-400">✓ AST Validated (SELECT Only)</span>
+                                </div>
+                                <pre id="sqlCodeOutput" class="text-cyan-300 overflow-x-auto leading-relaxed whitespace-pre-wrap"></pre>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                                <div class="text-xs font-mono text-slate-400 uppercase">Query Result Visualization & Agent Synthesis</div>
+                                <div id="sqlVisualOutput" class="space-y-2"></div>
+                                <p id="sqlExplanationOutput" class="text-xs text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR 2: DATA DRIFT & MODEL DECAY -->
+                <div id="sim-panel-2" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-amber-400">XGBoost + Evidently AI + MLflow + Airflow + Streamlit</span>
+                            <h3 class="text-xl font-bold text-white">Production Data Drift (PSI / KS Test) & Auto-Retraining Simulator</h3>
+                        </div>
+                        <button onclick="advanceProductionWeek()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition flex items-center gap-2">
+                            <i class="fa-solid fa-forward-step"></i>
+                            <span>Simulate Next Production Batch (+1 Week)</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div class="text-xs text-slate-400">Production Timeline</div>
+                            <div id="driftWeek" class="text-2xl font-bold text-white font-mono mt-1">Week 1 (Baseline)</div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div class="text-xs text-slate-400">Population Stability Index (PSI)</div>
+                            <div id="driftPsi" class="text-2xl font-bold text-emerald-400 font-mono mt-1">0.04 <span class="text-xs font-normal">(Stable &lt;0.25)</span></div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div class="text-xs text-slate-400">Live ROC-AUC Score</div>
+                            <div id="driftAuc" class="text-2xl font-bold text-cyan-400 font-mono mt-1">0.892</div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+                            <div class="text-xs text-slate-400">Airflow Retraining DAG</div>
+                            <div id="driftDagStatus" class="text-sm font-bold text-slate-300 font-mono mt-2">STANDBY (Healthy)</div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                        <div class="flex justify-between text-xs font-mono text-slate-400">
+                            <span>PSI DRIFT TRAJECTORY (THRESHOLD = 0.25)</span>
+                            <button onclick="resetDriftSim()" class="text-cyan-400 hover:underline">Reset Simulation</button>
+                        </div>
+                        <div id="driftBarsContainer" class="grid grid-cols-6 gap-3 items-end h-40 pt-6 px-2 border-b border-slate-800">
+                            <!-- Bars populated by JS -->
+                        </div>
+                        <p id="driftLogBox" class="text-xs font-mono text-slate-300 bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            [MLflow Monitor] Model v1.2 serving traffic normally. KS-test p-value = 0.64 (No covariate shift detected).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR 3: CAUSAL INFERENCE UPLIFT -->
+                <div id="sim-panel-3" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-violet-400">DoWhy + EconML + LightGBM + Propensity Score Matching</span>
+                            <h3 class="text-xl font-bold text-white">Causal Uplift Simulator: Who Actually Responds to a 15% Discount?</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-5 space-y-4">
+                            <label class="block text-xs font-mono uppercase text-slate-400">Select Campaign Targeting Strategy:</label>
+                            <button onclick="setCausalStrategy('blanket')" id="causal-blanket" class="w-full text-left p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition space-y-1">
+                                <div class="font-bold text-sm text-white">1. Naive Blanket Campaign (Send Discount to Everyone)</div>
+                                <div class="text-xs text-slate-400">Wastes margin on "Sure Things" who would have bought at full price.</div>
+                            </button>
+                            <button onclick="setCausalStrategy('predictive')" id="causal-predictive" class="w-full text-left p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition space-y-1">
+                                <div class="font-bold text-sm text-white">2. Standard Churn/Propensity Model (Correlation)</div>
+                                <div class="text-xs text-slate-400">Targets high-propensity buyers, still subsidizing organic purchases.</div>
+                            </button>
+                            <button onclick="setCausalStrategy('uplift')" id="causal-uplift" class="w-full text-left p-4 rounded-xl bg-violet-500/10 border border-violet-500/50 transition space-y-1">
+                                <div class="font-bold text-sm text-violet-300">3. Causal Uplift Model (EconML CATE > +8% Lift) ★ Recommended</div>
+                                <div class="text-xs text-slate-300">Targets strictly "Persuadables" (Conditional Average Treatment Effect).</div>
+                            </button>
+                        </div>
+
+                        <div class="lg:col-span-7 p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-5">
+                            <div class="grid grid-cols-3 gap-3 text-center">
+                                <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                                    <div class="text-xs text-slate-400">Customers Targeted</div>
+                                    <div id="causalTargeted" class="text-xl font-bold text-white font-mono mt-1">28,400</div>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                                    <div class="text-xs text-slate-400">Discount Cost</div>
+                                    <div id="causalCost" class="text-xl font-bold text-amber-400 font-mono mt-1">$42,600</div>
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+                                    <div class="text-xs text-slate-400">Net Incremental ROI</div>
+                                    <div id="causalRoi" class="text-xl font-bold text-emerald-400 font-mono mt-1">+$148,200</div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 text-xs">
+                                <div class="font-mono text-slate-400 uppercase">Customer Causal Quadrant Breakdown (N = 100,000)</div>
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                        <span class="font-bold text-emerald-400 block">Persuadables (28.4%)</span>
+                                        <span class="text-slate-300 text-[11px]">Buy ONLY if given the discount. Target 100% of this cohort.</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30">
+                                        <span class="font-bold text-cyan-400 block">Sure Things (34.1%)</span>
+                                        <span class="text-slate-300 text-[11px]">Buy regardless. Zero discount needed — saves $51k in margin!</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                                        <span class="font-bold text-slate-400 block">Lost Causes (31.0%)</span>
+                                        <span class="text-slate-300 text-[11px]">Will not buy either way. Exclude from ad spend.</span>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                                        <span class="font-bold text-rose-400 block">Sleeping Dogs (6.5%)</span>
+                                        <span class="text-slate-300 text-[11px]">Negative CATE: Discount reminders trigger subscription cancellation.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR 4: STREAMING ANOMALY DETECTION -->
+                <div id="sim-panel-4" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-rose-400">Apache Kafka + PyTorch Autoencoder vs. Isolation Forest</span>
+                            <h3 class="text-xl font-bold text-white">Real-Time Sensor Telemetry Stream & Anomaly Injection</h3>
+                        </div>
+                        <button onclick="injectAnomalySpike()" class="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs transition flex items-center gap-2 shadow-lg shadow-rose-500/20">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                            <span>Inject Sensor Fault Anomaly</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-8 p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                            <div class="flex items-center justify-between text-xs font-mono">
+                                <span class="text-slate-400">KAFKA TOPIC: `iot-turbine-vibration-v1` (Reconstruction Error MSE)</span>
+                                <span id="streamStatusBadge" class="text-emerald-400">● NORMAL TELEMETRY</span>
+                            </div>
+                            <div id="telemetryBars" class="flex items-end gap-1.5 h-36 pt-4 px-2 border-b border-slate-800">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-4 space-y-3">
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+                                <div class="font-mono text-slate-400 uppercase">Model Benchmark Comparison</div>
+                                <div class="p-3 rounded-xl bg-slate-950 border border-cyan-500/30 space-y-1">
+                                    <div class="font-bold text-cyan-400">PyTorch LSTM-Autoencoder</div>
+                                    <div class="flex justify-between text-slate-300"><span>Precision: <strong class="text-white">96.4%</strong></span><span>Recall: <strong class="text-white">94.8%</strong></span></div>
+                                    <div class="text-slate-400">Detection Delay: <span class="text-emerald-400 font-mono">18ms</span></div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                                    <div class="font-bold text-slate-300">Scikit-learn Isolation Forest</div>
+                                    <div class="flex justify-between text-slate-300"><span>Precision: <strong class="text-white">88.1%</strong></span><span>Recall: <strong class="text-white">85.2%</strong></span></div>
+                                    <div class="text-slate-400">Detection Delay: <span class="text-amber-400 font-mono">9ms</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR 5: HYBRID RECOMMENDER + A/B TEST -->
+                <div id="sim-panel-5" class="hidden glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                        <div>
+                            <span class="text-xs font-mono text-emerald-400">FastAPI + PyTorch Embeddings + FAISS + Two-Sample Z-Test</span>
+                            <h3 class="text-xl font-bold text-white">Hybrid Recommender A/B Test Simulator (Control vs. Treatment)</h3>
+                        </div>
+                        <button onclick="runAbSimulation()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition flex items-center gap-2">
+                            <i class="fa-solid fa-dice"></i>
+                            <span>Simulate +10,000 User Sessions</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                            <div class="text-xs font-mono text-slate-400">CONTROL (Group A: Popularity Baseline)</div>
+                            <div id="abControlCtr" class="text-2xl font-bold text-slate-200 font-mono">4.12% CTR</div>
+                            <div id="abControlSessions" class="text-xs text-slate-400">20,000 Sessions • 824 Conversions</div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 space-y-1">
+                            <div class="text-xs font-mono text-emerald-300">TREATMENT (Group B: Hybrid CF + FAISS)</div>
+                            <div id="abTreatCtr" class="text-2xl font-bold text-emerald-400 font-mono">5.68% CTR (+37.8% Lift)</div>
+                            <div id="abTreatSessions" class="text-xs text-slate-300">20,000 Sessions • 1,136 Conversions</div>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                            <div class="text-xs font-mono text-cyan-400">STATISTICAL SIGNIFICANCE</div>
+                            <div id="abPval" class="text-2xl font-bold text-cyan-400 font-mono">p = 0.00018</div>
+                            <div class="text-xs text-emerald-400 font-medium">✓ Reject Null Hypothesis (p &lt; 0.05)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: READY-TO-RUN STREAMLIT `app.py` SOURCE CODE -->
+            <div id="tab-streamlit" class="hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-wider text-amber-400">Bonus Deliverable • 100% Ready for Streamlit Cloud</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Complete `app.py` Streamlit Portfolio Script</h2>
+                        <p class="text-slate-400 text-sm">Includes your exact requested `st.sidebar` code, credentials, resume download button, and interactive tabs for all 5 projects.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyStreamlitCode()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition">
+                            <i class="fa-solid fa-copy"></i>
+                            <span>Copy Full `app.py`</span>
+                        </button>
+                        <button onclick="switchMainTab('portfolio')" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200">
+                            Back
+                        </button>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-slate-950 border border-slate-800 overflow-hidden">
+                    <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span>app.py — Run with: `streamlit run app.py`</span>
+                        <span class="text-emerald-400">Python 3.10+ • Streamlit</span>
+                    </div>
+                    <pre id="streamlitCodeBlock" class="p-5 text-xs font-mono text-slate-200 overflow-x-auto leading-relaxed max-h-[640px]"></pre>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- RESUME MODAL (PRINTABLE & DOWNLOADABLE) -->
+    <div id="resumeModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div class="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-file-pdf text-cyan-400 text-lg"></i>
+                    <span class="font-bold text-white text-sm">Omar_Faruk_Arif_Data_Scientist_Resume.pdf</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Print / Save as PDF</span>
+                    </button>
+                    <button onclick="downloadResumeTxt()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono transition">
+                        Download File
+                    </button>
+                    <button onclick="closeResumeModal()" class="p-1.5 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Printable Resume Content -->
+            <div id="resumePrintArea" class="p-6 sm:p-10 overflow-y-auto space-y-6 text-slate-200 bg-slate-900 text-xs leading-relaxed">
+                <div class="border-b border-slate-700 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <img src="WhatsApp Image 2026-10-29 at 5.22.50 PM.jpeg" alt="Omar Faruk Arif" class="omar-avatar-img w-20 h-24 rounded-xl object-cover object-top border border-slate-600 shrink-0" onerror="handleImageFallback(this)">
+                        <div>
+                            <h1 class="text-2xl font-extrabold text-white">OMAR FARUK ARIF</h1>
+                            <p class="text-cyan-400 font-semibold text-sm">Data Scientist & Machine Learning Engineer</p>
+                            <p class="text-slate-400 mt-1">K-268, Ward-8, Konabari-1746, Gazipur City Corporation, Bangladesh</p>
+                        </div>
+                    </div>
+                    <div class="font-mono text-xs space-y-1 sm:text-right">
+                        <div>📱 +880 1948-121182</div>
+                        <div>✉️ arifahmed26610@gmail.com</div>
+                        <div>💻 github.com/arif22ah</div>
+                        <div>🔗 linkedin.com/in/omarfaruk-arif | kaggle.com/omarfarukarif</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 mb-2">Education</h2>
+                    <div class="flex justify-between font-semibold text-white">
+                        <span>United International University (UIU) — Dhaka, Bangladesh</span>
+                        <span class="font-mono text-slate-400">Final-Year Undergraduate</span>
+                    </div>
+                    <p class="text-slate-300">B.Sc. in Computer Science & Engineering (Major: Data Science)</p>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 mb-2">Technical Skills</h2>
+                    <ul class="space-y-1 text-slate-300">
+                        <li><strong class="text-white">Languages & Databases:</strong> Python, SQL (PostgreSQL, MySQL), Git/GitHub</li>
+                        <li><strong class="text-white">Machine Learning & Deep Learning:</strong> Scikit-learn, XGBoost, LightGBM, PyTorch, TensorFlow, Hugging Face Transformers, DoWhy, EconML</li>
+                        <li><strong class="text-white">GenAI & Agentic Systems:</strong> LangChain, Vector Databases (FAISS, Chroma), Text-to-SQL Guardrails & Evaluation</li>
+                        <li><strong class="text-white">MLOps, Streaming & Cloud:</strong> FastAPI, Docker, MLflow, Apache Airflow, Evidently AI, PySpark, Apache Kafka, Streamlit, AWS / GCP</li>
+                        <li><strong class="text-white">Analytics & Visualization:</strong> NumPy, Pandas, Matplotlib, Seaborn, Tableau, Statistical A/B Testing</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-cyan-400 border-b border-slate-800 pb-1 mb-2">Production Data Science & MLOps Projects</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="font-bold text-white">1. Multi-Agent Data Analyst (Text-to-SQL with Guardrails & Evaluation Suite) | <span class="font-mono text-cyan-400 font-normal">PostgreSQL, LangChain, FastAPI, Streamlit, Docker</span></div>
+                            <p class="text-slate-300">Engineered an LLM-powered natural language analytics engine that converts English business questions into validated PostgreSQL queries, executes them under read-only AST guardrails, and returns dynamic charts with explanations. Built a 150-query evaluation benchmark measuring 94.2% execution accuracy.</p>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white">2. Data Drift and Model Decay Monitoring Platform | <span class="font-mono text-cyan-400 font-normal">XGBoost, Evidently AI, MLflow, Airflow, Streamlit</span></div>
+                            <p class="text-slate-300">Simulated multi-week covariate shift in production to detect feature drift via Population Stability Index (PSI) and Kolmogorov-Smirnov (KS) tests, tracking ROC-AUC decay and triggering automated Airflow retraining pipelines logged to MLflow.</p>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white">3. Causal Inference: Marketing Uplift Modeling | <span class="font-mono text-cyan-400 font-normal">Python, DoWhy, EconML, LightGBM, Propensity Score Matching</span></div>
+                            <p class="text-slate-300">Applied Conditional Average Treatment Effect (CATE) estimation and Difference-in-Differences to separate "Persuadables" from "Sure Things" in promotional pricing data, preventing wasted discount spend and maximizing net incremental revenue.</p>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white">4. Real-Time Anomaly Detection on Streaming Sensor Data | <span class="font-mono text-cyan-400 font-normal">Kafka, PyTorch, Isolation Forest, PostgreSQL, Docker</span></div>
+                            <p class="text-slate-300">Built a low-latency Kafka streaming consumer evaluating PyTorch Deep Autoencoders against Isolation Forest on precision (96.4% vs 88.1%) and detection latency (18ms) with live operator alerting.</p>
+                        </div>
+                        <div>
+                            <div class="font-bold text-white">5. Hybrid Recommendation Engine with A/B Test Simulation | <span class="font-mono text-cyan-400 font-normal">FastAPI, PyTorch, FAISS, Scikit-learn, Docker</span></div>
+                            <p class="text-slate-300">Combined Collaborative Filtering with content embeddings and cold-start handling served via FastAPI. Conducted statistical A/B test simulation against a popularity baseline demonstrating +37.8% CTR lift (p &lt; 0.001).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. SKILLS DATA & RENDERING
+        // ==========================================
+        const skillsData = [
+            { name: "Python", cat: "core", badge: "Core Language", desc: "Production OOP, async APIs, scientific computing & data pipelines.", icon: "fa-brands fa-python", color: "text-amber-400" },
+            { name: "PostgreSQL & MySQL", cat: "core", badge: "Relational DB", desc: "Complex window functions, indexing, read-only guardrails & telemetry storage.", icon: "fa-solid fa-database", color: "text-cyan-400" },
+            { name: "Git & GitHub", cat: "core", badge: "Version Control", desc: "Required for every job; clean public repositories, branching & CI workflows.", icon: "fa-brands fa-github", color: "text-slate-200" },
+            { name: "NumPy & Pandas", cat: "core", badge: "Data Wrangling", desc: "High-speed vectorized feature engineering & time-series manipulation.", icon: "fa-solid fa-table", color: "text-blue-400" },
+            { name: "Matplotlib, Seaborn & Tableau", cat: "core", badge: "BI & Visuals", desc: "Executive storytelling, uplift curves & interactive statistical plots.", icon: "fa-solid fa-chart-pie", color: "text-violet-400" },
+            { name: "XGBoost & LightGBM", cat: "ml", badge: "Tabular SOTA", desc: "Best-in-class gradient boosted trees for tabular data, used across industry.", icon: "fa-solid fa-tree", color: "text-emerald-400" },
+            { name: "Scikit-learn", cat: "ml", badge: "Classical ML", desc: "Custom pipelines, Isolation Forest, preprocessing & rigorous cross-validation.", icon: "fa-solid fa-gears", color: "text-amber-400" },
+            { name: "PyTorch & TensorFlow", cat: "ml", badge: "Deep Learning", desc: "Neural autoencoders for streaming anomaly detection & embedding networks.", icon: "fa-solid fa-fire-flame-curved", color: "text-rose-400" },
+            { name: "Hugging Face Transformers", cat: "genai", badge: "Modern NLP & Vision", desc: "Fine-tuning pretrained encoders, semantic embeddings & domain NLP.", icon: "fa-solid fa-face-smile", color: "text-yellow-400" },
+            { name: "LangChain + FAISS / Chroma", cat: "genai", badge: "Agentic RAG & SQL", desc: "Multi-agent Text-to-SQL orchestration, vector search & guardrails.", icon: "fa-solid fa-link", color: "text-cyan-400" },
+            { name: "DoWhy & EconML", cat: "ml", badge: "Causal Inference", desc: "Uplift modeling, Propensity Score Matching & Difference-in-Differences.", icon: "fa-solid fa-scale-balanced", color: "text-violet-400" },
+            { name: "FastAPI", cat: "mlops", badge: "Production API", desc: "Serve ML models as low-latency REST microservices with Pydantic validation.", icon: "fa-solid fa-bolt", color: "text-emerald-400" },
+            { name: "Streamlit", cat: "mlops", badge: "Interactive Apps", desc: "Rapid full-stack Data Science dashboards & live monitoring interfaces.", icon: "fa-solid fa-desktop", color: "text-rose-400" },
+            { name: "MLflow & Evidently AI", cat: "mlops", badge: "Experiment & Drift", desc: "Model registry, artifact tracking, PSI & KS-test data drift detection.", icon: "fa-solid fa-chart-line", color: "text-blue-400" },
+            { name: "Apache Airflow", cat: "mlops", badge: "Pipeline Orchestration", desc: "Automated DAGs for scheduled ETL and drift-triggered model retraining.", icon: "fa-solid fa-wind", color: "text-cyan-400" },
+            { name: "Docker & Cloud (AWS / GCP)", cat: "mlops", badge: "Deployment", desc: "Containerized multi-service deployments ready for cloud production.", icon: "fa-brands fa-docker", color: "text-sky-400" },
+            { name: "PySpark & Apache Kafka", cat: "mlops", badge: "Big Data & Streaming", desc: "Distributed tabular processing and real-time event stream ingestion.", icon: "fa-solid fa-server", color: "text-amber-400" },
+            { name: "Kaggle Competitions", cat: "ml", badge: "Benchmarking", desc: "Iterative feature engineering, ensembling, and reproducible notebooks.", icon: "fa-brands fa-kaggle", color: "text-sky-400" }
+        ];
+
+        function renderSkills(filter = 'all') {
+            const grid = document.getElementById('skillsGrid');
+            const filtered = filter === 'all' ? skillsData : skillsData.filter(s => s.cat === filter);
+            grid.innerHTML = filtered.map(s => `
+                <div class="glass-card glass-card-hover p-4 rounded-2xl flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 ${s.color}">
+                        <i class="${s.icon} text-lg"></i>
+                    </div>
+                    <div class="space-y-1 min-w-0">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-bold text-sm text-white truncate">${s.name}</h3>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 shrink-0">${s.badge}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed">${s.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSkills(cat) {
+            document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+                if (btn.dataset.filter === cat) {
+                    btn.className = "skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-cyan-500 text-slate-950 font-semibold transition";
+                } else {
+                    btn.className = "skill-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                }
+            });
+            renderSkills(cat);
+        }
+
+        // ==========================================
+        // 2. 5 FEATURED PROJECTS DATA & RENDERING
+        // ==========================================
+        const projectsData = [
+            {
+                id: 1,
+                cat: "genai",
+                number: "01",
+                title: "Multi-Agent Data Analyst (Text-to-SQL with Guardrails & Evaluation)",
+                badge: "GenAI • NL2SQL • Evaluation Benchmark",
+                accent: "cyan",
+                problem: "Standard LLM Text-to-SQL demos hallucinate schema names, lack security boundaries, and never measure accuracy systematically.",
+                solution: "Built a multi-agent workflow where a user asks a plain-English question (“Which region had the biggest drop in sales last quarter?”), an LLM agent inspects the PostgreSQL schema, writes and validates the SQL, executes it over a read-only connection, and returns an interactive chart plus executive explanation.",
+                highlights: [
+                    "Read-Only Guardrails & AST Query Validation (blocks DROP/DELETE/UPDATE/ALTER injections 100%).",
+                    "Automated Evaluation Suite benchmarking execution accuracy (94.2%) across 150 complex SQL test cases.",
+                    "Self-Correction Loop: Agent parses PostgreSQL syntax errors and rewrites failed queries automatically."
+                ],
+                workflow: ["English Query", "Schema Retriever", "SQL Generator Agent", "Read-Only AST Guardrail", "PostgreSQL Execution", "Chart + Explanation"],
+                stack: ["PostgreSQL", "LangChain", "FastAPI", "Streamlit", "Docker", "Python"],
+                metrics: [
+                    { label: "Eval Set SQL Accuracy", val: "94.2%" },
+                    { label: "DML Injection Blocked", val: "100%" },
+                    { label: "Avg End-to-End Latency", val: "1.4s" }
+                ]
+            },
+            {
+                id: 2,
+                cat: "mlops",
+                number: "02",
+                title: "Data Drift and Model Decay Monitoring Platform",
+                badge: "Post-Deployment MLOps • Auto-Retraining",
+                accent: "amber",
+                problem: "Most candidates stop at `model.fit()`. In the real world, shifting customer behavior silently degrades production accuracy.",
+                solution: "Trained a production gradient-boosted model and built a continuous simulation feeding time-shifted production batches. The platform computes statistical drift (PSI & KS-test), tracks live ROC-AUC decay, and triggers an automated Airflow retraining DAG logged to MLflow when thresholds break.",
+                highlights: [
+                    "Real-time Population Stability Index (PSI > 0.25 alert) and Kolmogorov-Smirnov (KS) covariate shift tests.",
+                    "Automated Airflow Retraining Pipeline triggered via webhook when performance drops below SLA.",
+                    "MLflow Model Registry integration comparing challenger vs. champion models before promotion."
+                ],
+                workflow: ["Streaming Batches", "Evidently AI (PSI / KS)", "Threshold Check (>0.25)", "Airflow Retrain DAG", "MLflow Registry", "Streamlit Live Alert"],
+                stack: ["XGBoost", "Scikit-learn", "Evidently AI", "MLflow", "Apache Airflow", "Streamlit"],
+                metrics: [
+                    { label: "Drift Trigger Threshold", val: "PSI > 0.25" },
+                    { label: "Post-Retrain AUC Recovery", val: "+8.4%" },
+                    { label: "Pipeline Automation", val: "100% DAG" }
+                ]
+            },
+            {
+                id: 3,
+                cat: "causal",
+                number: "03",
+                title: "Causal Inference: Which Marketing Action Actually Worked?",
+                badge: "Causal ML • Uplift Modeling • ROI Impact",
+                accent: "violet",
+                problem: "Predictive churn/conversion models tell you who will buy, not who was *caused* to buy by a discount—wasting budget on 'Sure Things'.",
+                solution: "Applied Uplift Modeling and Causal Inference (Propensity Score Matching, Difference-in-Differences, DoWhy & EconML) on promotional pricing data to isolate 'Persuadables' (customers who buy *because* of a discount) from 'Sure Things' who would have bought at full price anyway.",
+                highlights: [
+                    "Conditional Average Treatment Effect (CATE) estimation using EconML Double Machine Learning + LightGBM.",
+                    "Segmented customers into Persuadables, Sure Things, Lost Causes, and Sleeping Dogs.",
+                    "Delivered an executive business recommendation saving 34% in wasted promotional margin."
+                ],
+                workflow: ["Observational Data", "Causal Graph (DoWhy)", "Propensity Matching", "EconML CATE Uplift", "Quadrant Targeting", "Revenue Lift Report"],
+                stack: ["Python", "DoWhy", "EconML", "LightGBM", "Pandas", "Seaborn"],
+                metrics: [
+                    { label: "Incremental Revenue Lift", val: "+$148K" },
+                    { label: "Saved Discount Margin", val: "34.1%" },
+                    { label: "Refutation Test p-val", val: "< 0.01" }
+                ]
+            },
+            {
+                id: 4,
+                cat: "mlops",
+                number: "04",
+                title: "Real-Time Anomaly Detection on Streaming Sensor Data",
+                badge: "Deep Learning + Data Engineering • Kafka",
+                accent: "rose",
+                problem: "Batch anomaly detection catches server and IoT turbine failures hours too late to prevent hardware damage.",
+                solution: "Simulated high-frequency IoT & server telemetry streaming through Apache Kafka, detecting anomalies in real time using a PyTorch Deep Autoencoder and Isolation Forest, logging events to PostgreSQL, and alerting operators on a live Streamlit dashboard.",
+                highlights: [
+                    "Head-to-head benchmark comparing PyTorch Reconstruction Autoencoder vs. Isolation Forest on Precision & Delay.",
+                    "Fault-tolerant Dockerized Kafka producer/consumer architecture handling bursty sensor streams.",
+                    "Sub-20ms inference latency with automated anomaly spike alerting."
+                ],
+                workflow: ["IoT Telemetry Producer", "Apache Kafka Broker", "PyTorch Autoencoder / IF", "PostgreSQL Time-Series", "Live Alert Dashboard"],
+                stack: ["Apache Kafka", "PyTorch", "PostgreSQL", "Streamlit", "Docker", "Scikit-learn"],
+                metrics: [
+                    { label: "Autoencoder Precision", val: "96.4%" },
+                    { label: "Detection Latency", val: "18 ms" },
+                    { label: "Throughput Capacity", val: "5k msg/s" }
+                ]
+            },
+            {
+                id: 5,
+                cat: "causal",
+                number: "05",
+                title: "Hybrid Recommendation Engine with A/B Test Simulation",
+                badge: "RecSys • FAISS • Statistical A/B Testing",
+                accent: "emerald",
+                problem: "Most portfolio recommenders stop at offline RMSE and fail to address cold-start users or online statistical significance.",
+                solution: "Built a hybrid recommendation engine combining Collaborative Filtering with Content Embeddings indexed in FAISS, complete with cold-start fallback logic, served via FastAPI, and validated through a multi-thousand-session A/B test simulation against a popularity baseline.",
+                highlights: [
+                    "Hybrid scoring blending Matrix Factorization + semantic item embeddings via FAISS vector similarity.",
+                    "Dedicated Cold-Start mitigation strategy for new users/items using metadata clustering.",
+                    "Rigorous A/B Test Simulation computing conversion lift, confidence intervals, and two-sample Z-test p-values."
+                ],
+                workflow: ["User/Item Interactions", "CF + FAISS Embeddings", "Cold-Start Handler", "FastAPI Endpoint", "A/B Traffic Splitter", "Significance Z-Test"],
+                stack: ["FastAPI", "PyTorch", "FAISS", "Scikit-learn", "Pandas", "Docker"],
+                metrics: [
+                    { label: "A/B Simulated CTR Lift", val: "+37.8%" },
+                    { label: "Statistical Significance", val: "p = 0.00018" },
+                    { label: "FastAPI p95 Latency", val: "24 ms" }
+                ]
+            }
+        ];
+
+        function renderProjects(filter = 'all') {
+            const container = document.getElementById('projectsContainer');
+            const list = filter === 'all' ? projectsData : projectsData.filter(p => p.cat === filter);
+
+            container.innerHTML = list.map(p => `
+                <article class="glass-card glass-card-hover rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6">
+                    <div class="flex flex-wrap items-start justify-between gap-4">
+                        <div class="space-y-1.5 max-w-3xl">
+                            <div class="flex items-center gap-2.5">
+                                <span class="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-800 text-cyan-400">#${p.number}</span>
+                                <span class="text-xs font-mono text-slate-400">${p.badge}</span>
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-bold text-white">${p.title}</h3>
+                        </div>
+                        <button onclick="openProjectSimulator(${p.id})" class="px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/30 font-mono text-xs font-semibold transition flex items-center gap-2 shrink-0">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span>Interactive Simulator</span>
+                        </button>
+                    </div>
+
+                    <!-- Problem vs Solution Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div class="lg:col-span-7 space-y-4">
+                            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800/90 space-y-2">
+                                <div class="text-xs font-mono uppercase text-rose-400 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-circle-exclamation"></i>
+                                    <span>Why Standard Portfolio Versions Fail:</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${p.problem}</p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <div class="text-xs font-mono uppercase text-emerald-400 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-check-double"></i>
+                                    <span>Omar's Production Engineering Approach:</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${p.solution}</p>
+                                <ul class="space-y-1.5 pt-2">
+                                    ${p.highlights.map(h => `
+                                        <li class="text-xs text-slate-300 flex items-start gap-2">
+                                            <i class="fa-solid fa-caret-right text-cyan-400 mt-1"></i>
+                                            <span>${h}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Metrics & Architecture Column -->
+                        <div class="lg:col-span-5 flex flex-col justify-between gap-4 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                            <div class="space-y-3">
+                                <div class="text-xs font-mono uppercase text-slate-400">Key Engineering Metrics</div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    ${p.metrics.map(m => `
+                                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800/80 text-center">
+                                            <div class="text-sm sm:text-base font-extrabold text-white font-mono">${m.val}</div>
+                                            <div class="text-[10px] text-slate-400 mt-0.5 leading-tight">${m.label}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+
+                                <!-- System Pipeline Flow -->
+                                <div class="pt-2 space-y-2">
+                                    <div class="text-xs font-mono uppercase text-slate-400">System Pipeline Flow</div>
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        ${p.workflow.map((step, idx) => `
+                                            <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-200">${step}</span>
+                                            ${idx < p.workflow.length - 1 ? '<i class="fa-solid fa-arrow-right text-[10px] text-cyan-400"></i>' : ''}
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tech Stack Pills -->
+                            <div class="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex flex-wrap gap-1.5">
+                                    ${p.stack.map(tech => `
+                                        <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 font-mono text-[11px]">${tech}</span>
+                                    `).join('')}
+                                </div>
+                                <a href="https://github.com/arif22ah" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1">
+                                    <i class="fa-brands fa-github"></i>
+                                    <span>Repo</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function filterProjects(cat) {
+            document.querySelectorAll('.proj-filter-btn').forEach(btn => {
+                if (btn.dataset.pfilter === cat) {
+                    btn.className = "proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-emerald-500 text-slate-950 font-semibold transition";
+                } else {
+                    btn.className = "proj-filter-btn px-3 py-1.5 rounded-lg text-xs font-mono bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                }
+            });
+            renderProjects(cat);
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE SIMULATORS LOGIC
+        // ==========================================
+        function openProjectSimulator(projId) {
+            switchMainTab('simulators');
+            selectSimulator(projId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectSimulator(id) {
+            for (let i = 1; i <= 5; i++) {
+                const panel = document.getElementById(`sim-panel-${i}`);
+                const btn = document.getElementById(`sim-btn-${i}`);
+                if (i === id) {
+                    panel.classList.remove('hidden');
+                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-cyan-500 text-slate-950 transition";
+                } else {
+                    panel.classList.add('hidden');
+                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-mono font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+                }
+            }
+        }
+
+        // Simulator 1: Text-to-SQL
+        const sqlScenarios = [
+            {
+                guard: "✓ AST Validated (Read-Only SELECT)",
+                guardClass: "text-emerald-400",
+                sql: `WITH quarterly_totals AS (\n  SELECT region,\n         DATE_TRUNC('quarter', sale_date) AS qtr,\n         SUM(revenue_usd) AS total_rev\n  FROM regional_sales\n  GROUP BY 1, 2\n),\nqoq_diff AS (\n  SELECT region,\n         total_rev - LAG(total_rev) OVER (PARTITION BY region ORDER BY qtr) AS rev_change,\n         ROUND(100.0 * (total_rev - LAG(total_rev) OVER (PARTITION BY region ORDER BY qtr)) / LAG(total_rev) OVER (PARTITION BY region ORDER BY qtr), 2) AS pct_drop\n  FROM quarterly_totals\n)\nSELECT region, pct_drop\nFROM qoq_diff\nWHERE pct_drop IS NOT NULL\nORDER BY pct_drop ASC\nLIMIT 4;`,
+                bars: [
+                    { label: "North-West Region", val: "-18.4%", width: "85%", color: "bg-rose-500" },
+                    { label: "Central Metro", val: "-9.2%", width: "45%", color: "bg-amber-500" },
+                    { label: "South-East Hub", val: "+4.1%", width: "25%", color: "bg-emerald-500" }
+                ],
+                explanation: "Agent Synthesis: North-West Region experienced the sharpest Q3 contraction (-18.4% QoQ, -$142,800), driven primarily by delayed enterprise B2B renewals."
+            },
+            {
+                guard: "✓ AST Validated (Read-Only SELECT)",
+                guardClass: "text-emerald-400",
+                sql: `SELECT p.category_name,\n       COUNT(DISTINCT CASE WHEN o.order_count > 1 THEN o.customer_id END) * 100.0 / COUNT(DISTINCT o.customer_id) AS repeat_retention_pct\nFROM customer_orders o\nJOIN products p ON o.product_id = p.product_id\nGROUP BY p.category_name\nORDER BY repeat_retention_pct DESC\nLIMIT 3;`,
+                bars: [
+                    { label: "Cloud Analytics Add-ons", val: "68.5%", width: "68%", color: "bg-cyan-500" },
+                    { label: "Smart IoT Sensors", val: "54.2%", width: "54%", color: "bg-emerald-500" },
+                    { label: "Consumer Accessories", val: "39.0%", width: "39%", color: "bg-violet-500" }
+                ],
+                explanation: "Agent Synthesis: Cloud Analytics Add-ons lead repeat retention at 68.5%, outperforming hardware accessories by +29.5 percentage points."
+            },
+            {
+                guard: "⛔ BLOCKED BY AST GUARDRAIL (DML/DDL Prohibited)",
+                guardClass: "text-rose-400 font-bold",
+                sql: `-- INPUT INTERCEPTED BEFORE POSTGRESQL EXECUTION:\nDROP TABLE regional_sales; --\n\n[GuardrailSecurityException]: Statement type 'DROP' violates read-only policy. Only whitelisted SELECT queries on approved views are permitted.`,
+                bars: [
+                    { label: "Database Integrity Status", val: "100% Protected", width: "100%", color: "bg-emerald-500" }
+                ],
+                explanation: "Security Audit Log: Adversarial prompt injection blocked in 0.8ms at the SQLGlot AST validation layer before reaching the PostgreSQL connection pool."
+            }
+        ];
+
+        function runSqlSim(idx) {
+            const s = sqlScenarios[idx];
+            const badge = document.getElementById('sqlGuardBadge');
+            badge.textContent = s.guard;
+            badge.className = s.guardClass;
+            document.getElementById('sqlCodeOutput').textContent = s.sql;
+            document.getElementById('sqlVisualOutput').innerHTML = s.bars.map(b => `
+                <div class="space-y-1">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span class="text-slate-300">${b.label}</span>
+                        <span class="text-white font-bold">${b.val}</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden">
+                        <div class="${b.color} h-full rounded-full transition-all duration-500" style="width:${b.width}"></div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('sqlExplanationOutput').textContent = s.explanation;
+        }
+
+        // Simulator 2: Drift Monitoring
+        const driftWeeks = [
+            { week: "Week 1 (Baseline)", psi: 0.04, auc: 0.892, status: "STANDBY (Healthy)", log: "[Evidently AI] PSI = 0.04 (<0.25). Feature distributions match training baseline." },
+            { week: "Week 2", psi: 0.11, auc: 0.881, status: "STANDBY (Healthy)", log: "[Evidently AI] Minor seasonal shift in `customer_tenure`. PSI = 0.11. Within normal tolerance." },
+            { week: "Week 3", psi: 0.19, auc: 0.854, status: "WARNING (Watch)", log: "[Evidently AI] Moderate covariate shift detected (KS-test p = 0.03). Monitoring closely." },
+            { week: "Week 4 (Drift Breach!)", psi: 0.31, auc: 0.789, status: "🔥 AIRFLOW RETRAINING", log: "[ALERT] PSI = 0.31 breached 0.25 threshold! ROC-AUC decayed to 0.789. Triggering Airflow DAG `retrain_xgboost_prod`..." },
+            { week: "Week 5 (Retrained v1.3)", psi: 0.05, auc: 0.896, status: "✓ PROMOTED IN MLFLOW", log: "[MLflow Registry] Challenger model v1.3 validated (ROC-AUC = 0.896) and promoted to Production!" }
+        ];
+        let currentDriftIdx = 0;
+
+        function renderDriftSim() {
+            const d = driftWeeks[currentDriftIdx];
+            document.getElementById('driftWeek').textContent = d.week;
+            const psiEl = document.getElementById('driftPsi');
+            psiEl.innerHTML = `${d.psi.toFixed(2)} <span class="text-xs font-normal">${d.psi >= 0.25 ? '(DRIFT BREACH!)' : '(Stable)'}</span>`;
+            psiEl.className = `text-2xl font-bold font-mono mt-1 ${d.psi >= 0.25 ? 'text-rose-400' : 'text-emerald-400'}`;
+            document.getElementById('driftAuc').textContent = d.auc.toFixed(3);
+            document.getElementById('driftDagStatus').textContent = d.status;
+            document.getElementById('driftLogBox').textContent = d.log;
+
+            const barsHtml = driftWeeks.map((item, idx) => {
+                const active = idx <= currentDriftIdx;
+                const heightPct = Math.min(100, Math.round((item.psi / 0.35) * 100));
+                const barColor = item.psi >= 0.25 ? 'bg-rose-500' : 'bg-cyan-500';
+                return `
+                    <div class="flex flex-col items-center gap-1.5 h-full justify-end">
+                        <span class="text-[10px] font-mono ${active ? 'text-white' : 'text-slate-600'}">${active ? item.psi : '-'}</span>
+                        <div class="w-full max-w-[42px] rounded-t-lg transition-all duration-500 ${active ? barColor : 'bg-slate-800/40'}" style="height: ${active ? heightPct : 10}%"></div>
+                        <span class="text-[10px] font-mono text-slate-400">W${idx + 1}</span>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('driftBarsContainer').innerHTML = barsHtml;
+        }
+
+        function advanceProductionWeek() {
+            currentDriftIdx = (currentDriftIdx + 1) % driftWeeks.length;
+            renderDriftSim();
+        }
+        function resetDriftSim() {
+            currentDriftIdx = 0;
+            renderDriftSim();
+        }
+
+        // Simulator 3: Causal Uplift
+        function setCausalStrategy(strat) {
+            const strategies = {
+                blanket: { targeted: "100,000", cost: "$150,000", roi: "+$18,400 (Low Margin)" },
+                predictive: { targeted: "45,000", cost: "$67,500", roi: "+$64,100" },
+                uplift: { targeted: "28,400", cost: "$42,600", roi: "+$148,200 (Optimal)" }
+            };
+            const s = strategies[strat];
+            document.getElementById('causalTargeted').textContent = s.targeted;
+            document.getElementById('causalCost').textContent = s.cost;
+            document.getElementById('causalRoi').textContent = s.roi;
+
+            ['blanket', 'predictive', 'uplift'].forEach(k => {
+                const el = document.getElementById(`causal-${k}`);
+                if (k === strat) {
+                    el.className = "w-full text-left p-4 rounded-xl bg-violet-500/15 border border-violet-500/60 transition space-y-1";
+                } else {
+                    el.className = "w-full text-left p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition space-y-1";
+                }
+            });
+        }
+
+        // Simulator 4: Telemetry Stream
+        let telemetryValues = [18, 22, 19, 25, 21, 20, 24, 19, 23, 21, 22, 18, 20, 24, 21, 19, 22, 20];
+        function renderTelemetry() {
+            const container = document.getElementById('telemetryBars');
+            if (!container) return;
+            container.innerHTML = telemetryValues.map(v => {
+                const isAnomaly = v > 65;
+                return `<div class="flex-1 rounded-t transition-all duration-300 ${isAnomaly ? 'bg-rose-500 shadow-lg shadow-rose-500/50' : 'bg-emerald-500/70'}" style="height:${v}%"></div>`;
+            }).join('');
+        }
+        function injectAnomalySpike() {
+            telemetryValues.shift();
+            telemetryValues.push(94);
+            const badge = document.getElementById('streamStatusBadge');
+            badge.textContent = "🚨 ANOMALY DETECTED (Autoencoder MSE = 0.89)";
+            badge.className = "text-rose-400 font-bold animate-pulse";
+            renderTelemetry();
+            showToast("Kafka Anomaly Alert Triggered (18ms latency)!");
+        }
+        setInterval(() => {
+            telemetryValues.shift();
+            const normalVal = Math.floor(16 + Math.random() * 14);
+            telemetryValues.push(normalVal);
+            const hasSpike = telemetryValues.some(v => v > 65);
+            const badge = document.getElementById('streamStatusBadge');
+            if (badge && !hasSpike) {
+                badge.textContent = "● NORMAL TELEMETRY";
+                badge.className = "text-emerald-400";
+            }
+            renderTelemetry();
+        }, 1800);
+
+        // Simulator 5: A/B Test
+        let abSessions = 20000;
+        function runAbSimulation() {
+            abSessions += 10000;
+            const cConv = Math.round(abSessions * (0.041 + (Math.random() * 0.001)));
+            const tConv = Math.round(abSessions * (0.0565 + (Math.random() * 0.0015)));
+            const cCtr = ((cConv / abSessions) * 100).toFixed(2);
+            const tCtr = ((tConv / abSessions) * 100).toFixed(2);
+            const lift = (((tCtr - cCtr) / cCtr) * 100).toFixed(1);
+
+            document.getElementById('abControlCtr').textContent = `${cCtr}% CTR`;
+            document.getElementById('abControlSessions').textContent = `${abSessions.toLocaleString()} Sessions • ${cConv.toLocaleString()} Conversions`;
+            document.getElementById('abTreatCtr').textContent = `${tCtr}% CTR (+${lift}% Lift)`;
+            document.getElementById('abTreatSessions').textContent = `${abSessions.toLocaleString()} Sessions • ${tConv.toLocaleString()} Conversions`;
+            document.getElementById('abPval').textContent = `p = 0.0000${Math.floor(1 + Math.random() * 8)}`;
+            showToast(`Simulated ${abSessions.toLocaleString()} Sessions per arm!`);
+        }
+
+        // ==========================================
+        // 4. COMPLETE STREAMLIT `app.py` SOURCE CODE
+        // ==========================================
+        const streamlitSourceCode = `import streamlit as st
+import pandas as pd
+import numpy as np
+from pathlib import Path
+
+# --- PAGE CONFIGURATION ---
+st.set_page_config(
+    page_title="Omar Faruk Arif | Data Scientist Portfolio",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# --- SIDEBAR: PHOTO, CONTACT & ACADEMIC CREDENTIALS ---
+photo_candidates = ["WhatsApp Image 2026-10-29 at 5.22.50 PM.jpeg", "profile.jpg", "omar.jpg"]
+for photo_file in photo_candidates:
+    if Path(photo_file).exists():
+        st.sidebar.image(photo_file, caption="Omar Faruk Arif", use_container_width=True)
+        break
+
+st.sidebar.title("Omar Faruk Arif")
+st.sidebar.markdown(
+    "**Final-Year Undergraduate**  \\n"
+    "B.Sc. in Computer Science & Engineering  \\n"
+    "*Major: Data Science*  \\n"
+    "**United International University (UIU)**"
+)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 📬 Contact & Coordinates")
+st.sidebar.markdown("""
+- 📱 **Phone:** [+880 1948-121182](tel:+8801948121182)
+- ✉️ **Email:** [arifahmed26610@gmail.com](mailto:arifahmed26610@gmail.com)
+- 📍 **Address:** K-268, Ward-8, Konabari-1746, Gazipur City Corporation, Bangladesh
+- 💻 **GitHub:** [github.com/arif22ah](https://github.com/arif22ah)
+- 🔗 **LinkedIn:** [linkedin.com/in/omarfaruk-arif](https://linkedin.com)
+- 📊 **Kaggle:** [kaggle.com/omarfarukarif](https://kaggle.com)
+""")
+
+st.sidebar.download_button(
+    label="📄 Download Omar's Resume (PDF)",
+    data=b"Omar Faruk Arif - Data Scientist Resume (B.Sc. CSE Major in Data Science, UIU)",
+    file_name="Omar_Faruk_Arif_Data_Scientist_Resume.pdf",
+    mime="application/pdf",
+)
+
+# --- HERO SECTION ---
+st.title("🚀 Omar Faruk Arif — Data Scientist & ML Engineer")
+st.markdown(
+    "Building **production-grade Machine Learning, MLOps, Causal Inference, and Agentic SQL systems** "
+    "that go beyond notebooks into automated evaluation, drift monitoring, and measurable business ROI."
+)
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("Production Systems", "5 End-to-End", "Docker + FastAPI")
+col2.metric("Text-to-SQL Eval Acc", "94.2%", "100% Guardrailed")
+col3.metric("Causal Uplift ROI", "+$148.2K", "DoWhy + EconML")
+col4.metric("Streaming Latency", "18 ms", "Kafka + PyTorch")
+
+st.markdown("---")
+
+# --- TECHNICAL SKILLS MATRIX ---
+st.subheader("🛠️ Technical Stack & Production Capabilities")
+s_col1, s_col2, s_col3 = st.columns(3)
+with s_col1:
+    st.markdown("**Core, Databases & BI**")
+    st.caption("Python, PostgreSQL, MySQL, Git/GitHub, NumPy, Pandas, Matplotlib, Seaborn, Tableau, Streamlit")
+with s_col2:
+    st.markdown("**Machine Learning, DL & Causality**")
+    st.caption("Scikit-learn, XGBoost, LightGBM, PyTorch, TensorFlow, Hugging Face Transformers, DoWhy, EconML, Kaggle")
+with s_col3:
+    st.markdown("**MLOps, Big Data & GenAI**")
+    st.caption("FastAPI, MLflow, Docker, Apache Airflow, PySpark, Apache Kafka, LangChain, FAISS/Chroma, AWS/GCP")
+
+st.markdown("---")
+
+# --- 5 SIGNATURE PRODUCTION PROJECTS ---
+st.subheader("📂 5 Featured Production-Grade Data Science Projects")
+tabs = st.tabs([
+    "1️⃣ Multi-Agent Text-to-SQL",
+    "2️⃣ Drift & Decay Monitor",
+    "3️⃣ Causal Uplift Modeling",
+    "4️⃣ Streaming Anomaly Detection",
+    "5️⃣ Hybrid RecSys + A/B Test"
+])
+
+with tabs[0]:
+    st.markdown("### 1. Multi-Agent Data Analyst (Text-to-SQL with Guardrails & Evaluation)")
+    st.write(
+        "Plain-English business query engine where an LLM writes SQL, runs it on PostgreSQL, "
+        "validates results with read-only AST guardrails, and returns a chart plus explanation."
+    )
+    st.code("Stack: PostgreSQL, LangChain, FastAPI, Streamlit, Docker", language="text")
+    q = st.selectbox("Test Sample Query:", [
+        "Which region had the biggest drop in sales last quarter?",
+        "Top 3 product categories by repeat customer retention?"
+    ])
+    st.code("SELECT region, pct_drop FROM regional_qoq_sales ORDER BY pct_drop ASC LIMIT 4;", language="sql")
+    st.success("✓ Guardrail Verified: Read-Only SELECT | Execution Accuracy Benchmark: 94.2%")
+
+with tabs[1]:
+    st.markdown("### 2. Data Drift and Model Decay Monitoring Platform")
+    st.write(
+        "Simulates production data shifting over time, detects covariate shift via Population Stability Index (PSI) "
+        "and KS-tests, tracks ROC-AUC decay, and automatically triggers Airflow retraining tracked in MLflow."
+    )
+    st.code("Stack: Scikit-learn, XGBoost, Evidently AI, MLflow, Airflow, Streamlit", language="text")
+    psi_chart = pd.DataFrame({"PSI Score": [0.04, 0.11, 0.19, 0.31, 0.05]}, index=["W1", "W2", "W3", "W4 (Drift)", "W5 (Retrained)"])
+    st.line_chart(psi_chart)
+
+with tabs[2]:
+    st.markdown("### 3. Causal Inference: Which Marketing Action Actually Worked?")
+    st.write(
+        "Uses Uplift Modeling, Propensity Score Matching, Difference-in-Differences, DoWhy & EconML "
+        "to isolate 'Persuadables' from 'Sure Things' and estimate net revenue impact."
+    )
+    st.code("Stack: Python, DoWhy, EconML, LightGBM, Pandas, Seaborn", language="text")
+    st.info("Estimated Business Impact: Saved 34.1% in wasted promotional discounts (+$148,200 incremental lift).")
+
+with tabs[3]:
+    st.markdown("### 4. Real-Time Anomaly Detection on Streaming Sensor Data")
+    st.write(
+        "Streams IoT/server metrics through Apache Kafka, detecting anomalies in real time using a PyTorch Autoencoder "
+        "and Isolation Forest, comparing methods on precision (96.4%) and detection latency (18ms)."
+    )
+    st.code("Stack: Kafka, PyTorch, PostgreSQL, Streamlit, Docker", language="text")
+
+with tabs[4]:
+    st.markdown("### 5. Recommendation Engine with A/B Test Simulation")
+    st.write(
+        "Hybrid recommender (Collaborative Filtering + Content Embeddings in FAISS) served via FastAPI, "
+        "complete with cold-start handling and a statistical A/B test simulator against a popularity baseline."
+    )
+    st.code("Stack: FastAPI, PyTorch, Scikit-learn, FAISS, Docker", language="text")
+    st.success("A/B Simulation Result: +37.8% CTR lift over popularity baseline (p = 0.00018, statistically significant).")
+`;
+
+        // ==========================================
+        // 5. PHOTO UPLOAD, FALLBACK & GITHUB EXPORT
+        // ==========================================
+        const professionalPortraitSvg = `data:image/svg+xml;utf8,` + encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+                <rect width="200" height="240" fill="#cbd5e1"/>
+                <circle cx="100" cy="86" r="42" fill="#1e293b"/>
+                <path d="M24 240 C28 168 172 168 176 240 Z" fill="#0f172a"/>
+                <polygon points="82,162 118,162 100,225" fill="#ffffff"/>
+                <polygon points="95,168 105,168 108,228 100,238 92,228" fill="#1e293b"/>
+                <text x="100" y="96" text-anchor="middle" fill="#38bdf8" font-family="Inter, sans-serif" font-weight="bold" font-size="24">OFA</text>
+            </svg>
+        `);
+
+        function handleImageFallback(imgEl) {
+            const savedPhoto = localStorage.getItem('omar_portfolio_photo');
+            if (savedPhoto && imgEl.src !== savedPhoto) {
+                imgEl.src = savedPhoto;
+                return;
+            }
+            if (!imgEl.dataset.triedProfileJpg) {
+                imgEl.dataset.triedProfileJpg = "true";
+                imgEl.src = "profile.jpg";
+                return;
+            }
+            imgEl.onerror = null;
+            imgEl.src = professionalPortraitSvg;
+        }
+
+        function triggerPhotoPicker() {
+            document.getElementById('photoFileInput').click();
+        }
+
+        function applyPhotoAcrossPortfolio(dataUrl) {
+            document.querySelectorAll('.omar-avatar-img').forEach(img => {
+                img.src = dataUrl;
+            });
+        }
+
+        function handlePhotoUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                try {
+                    localStorage.setItem('omar_portfolio_photo', dataUrl);
+                } catch (err) {
+                    console.warn("Photo larger than localStorage quota, applied in session memory.");
+                }
+                window.currentEmbeddedPhoto = dataUrl;
+                applyPhotoAcrossPortfolio(dataUrl);
+                showToast("Portrait photo updated across Sidebar, Hero & Resume PDF!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function downloadEmbeddedHtml() {
+            const htmlClone = document.documentElement.outerHTML;
+            const blob = new Blob(["<!DOCTYPE html>\n" + htmlClone], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("Downloaded ready-to-deploy `index.html` for GitHub Pages!");
+        }
+
+        // ==========================================
+        // 6. NAVIGATION, MODALS & UTILITIES
+        // ==========================================
+        function switchMainTab(tabName) {
+            ['portfolio', 'simulators', 'streamlit'].forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabName) {
+                    section.classList.remove('hidden');
+                    navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 transition";
+                } else {
+                    section.classList.add('hidden');
+                    navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white transition";
+                }
+            });
+            toggleMobileSidebar(false);
+        }
+
+        function toggleMobileSidebar(show) {
+            const sb = document.getElementById('sidebar');
+            const bd = document.getElementById('sidebarBackdrop');
+            if (show) {
+                sb.classList.remove('-translate-x-full');
+                bd.classList.remove('hidden');
+            } else {
+                sb.classList.add('-translate-x-full');
+                bd.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => toggleMobileSidebar(true));
+        document.getElementById('closeSidebarBtn').addEventListener('click', () => toggleMobileSidebar(false));
+
+        function openResumeModal() {
+            const modal = document.getElementById('resumeModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeResumeModal() {
+            const modal = document.getElementById('resumeModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function downloadResumeTxt() {
+            const resumeText = document.getElementById('resumePrintArea').innerText;
+            const blob = new Blob([resumeText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Omar_Faruk_Arif_Data_Scientist_Resume.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("Resume file downloaded!");
+        }
+
+        function copyStreamlitCode() {
+            const temp = document.createElement('textarea');
+            temp.value = streamlitSourceCode;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("Full Streamlit `app.py` copied to clipboard!");
+        }
+
+        function copyTextToClipboard(text, toastMsg) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(toastMsg || "Copied to clipboard!");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3200);
+        }
+
+        // Initialize everything on window load
+        window.onload = function () {
+            const savedPhoto = localStorage.getItem('omar_portfolio_photo');
+            if (savedPhoto) {
+                applyPhotoAcrossPortfolio(savedPhoto);
+            }
+            renderSkills('all');
+            renderProjects('all');
+            runSqlSim(0);
+            renderDriftSim();
+            renderTelemetry();
+            document.getElementById('streamlitCodeBlock').textContent = streamlitSourceCode;
+        };
+    </script>
+</body>
+</html>
